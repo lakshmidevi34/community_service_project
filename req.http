@@ -1,0 +1,159 @@
+# =====================================================
+#PATIENT REGISTRATION
+# =====================================================
+POST http://localhost:8000/patient-api/patient
+Content-Type: application/json
+
+{
+  "name": "zxc",
+  "email": "zx@gmail.com",
+  "password": "zxc1234"
+}
+
+###
+
+# =====================================================
+#PATIENT LOGIN
+# =====================================================
+POST http://localhost:8000/patient-api/patientlogin
+Content-Type: application/json
+
+{
+  "email": "zx@gmail.com",
+  "password": "zxc1234"
+}
+
+###
+# =====================================================
+# ✅ STEP 3: PATIENT ADD TODAY CONDITION(PATIENT_ID)
+# =====================================================
+PUT http://localhost:8000/patient-api/todaycondi/PATIENT_ID
+Content-Type: application/json
+
+{
+  "description": "Today my BP is 110/80"
+}
+
+###
+# =====================================================
+#PATIENT EDIT OWN CONDITION(PATIENT_ID,CONDITION_ID)
+# =====================================================
+PUT http://localhost:8000/patient-api/edit-todaycondi/PATIENT_ID/CONDITION_ID
+Content-Type: application/json
+
+{
+  "description": "Today my BP is 110/80 and sugar level is before 140"
+}
+
+###
+# =====================================================
+#HS WORKER REGISTRATION (PENDING ADMIN)
+# =====================================================
+POST http://localhost:8000/hsworker-api/hsworker
+Content-Type: application/json
+
+{
+  "hswname": "doctor1",
+  "email": "doctor1@gmail.com",
+  "password": "doctor1"
+}
+
+###
+# =====================================================
+#ADMIN APPROVES HS WORKER(HSWORKER_ID)
+# =====================================================
+PUT http://localhost:8000/admin-api/approve-hsworker/HSWORKER_ID
+
+###
+# =====================================================
+#HS WORKER LOGIN
+# =====================================================
+POST http://localhost:8000/hsworker-api/hswlogin
+Content-Type: application/json
+
+{
+  "email": "doctor1@gmail.com",
+  "password": "doctor1"
+}
+
+###
+# =====================================================
+#PATIENT REQUEST APPOINTMENT
+# =====================================================
+POST http://localhost:8000/patient-api/request-appointment
+Content-Type: application/json
+
+{
+  "patientId": "PATIENT_ID",
+  "hswId": "HSWORKER_ID",
+  "appointmentDate": "2025-12-10T10:30:00.000Z",
+  "reason": "Regular BP Check"
+}
+
+###
+# =====================================================
+#HS WORKER VIEW APPOINTMENTS(HSWORKER_ID)
+# =====================================================
+GET http://localhost:8000/hsworker-api/appointments/HSWORKER_ID
+
+###
+# =====================================================
+#HS WORKER ACCEPT / REJECT APPOINTMENT(APPOINTMENT_ID)
+# =====================================================
+PUT http://localhost:8000/hsworker-api/update-appointment/APPOINTMENT_ID
+Content-Type: application/json
+
+{
+  "status": "accepted"
+}
+
+
+###
+# =====================================================
+#PATIENT VIEW OWN APPOINTMENTS(PATIENT_ID)
+# =====================================================
+GET http://localhost:8000/patient-api/my-appointments/PATIENT_ID
+
+###
+# =====================================================
+#PATIENT VIEW PRESCRIPTIONS(PATIENT_ID)
+# =====================================================
+GET http://localhost:8000/patient-api/prescriptions/PATIENT_ID
+
+###
+# =====================================================
+#HS WORKER ADD NEW PATIENT CONDITION(PATIENT_ID)
+# =====================================================
+PUT http://localhost:8000/hsworker-api/update-patient-condition/PATIENT_ID
+Content-Type: application/json
+
+{
+  "description": "BP is 120/80 today",
+  "hswid": "HSWORKER_ID"
+}
+
+###
+# =====================================================
+#HS WORKER EDIT PATIENT CONDITION(PATIENT_ID)
+# =====================================================
+PUT http://localhost:8000/hsworker-api/update-patient-condition/PATIENT_ID
+Content-Type: application/json
+
+{
+  "todaycondiid": "CONDITION_ID",
+  "description": "Patient BP stable",
+  "hswid": "HSWORKER_ID"
+}
+
+###
+# =====================================================
+#PATIENT LOGOUT
+# =====================================================
+GET http://localhost:8000/patient-api/patientlogout
+
+###
+
+# =====================================================
+#HS WORKER LOGOUT
+# =====================================================
+GET http://localhost:8000/hsworker-api/hswlogout
