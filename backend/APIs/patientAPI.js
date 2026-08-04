@@ -28,7 +28,7 @@ patientRoute.post('/patientlogin', async (req, res) => {
 
     let token = jwt.sign(
       { role: "patient", patientId: patient._id },
-      "abcdef",
+      process.env.JWT_SECRET || "abcdef",
       { expiresIn: "1h" }
     )
 

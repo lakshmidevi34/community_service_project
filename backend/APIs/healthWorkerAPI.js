@@ -31,7 +31,7 @@ hswRoute.post('/hswlogin', async (req, res) => {
 
     let token = jwt.sign(
       { role: "hsworker", hswid: hsw._id },
-      "abcdef",
+      process.env.JWT_SECRET || "abcdef",
       { expiresIn: "1h" }
     )
 
