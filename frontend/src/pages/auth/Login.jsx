@@ -17,7 +17,9 @@ export default function Login() {
       const url =
         role === "patient"
           ? "/patient-api/patientlogin"
-          : "/hsworker-api/hswlogin";
+          : role === "hsworker"
+          ? "/hsworker-api/hswlogin"
+          : "/admin-api/adminlogin";
 
       const res = await axios.post(url, form);
 
@@ -39,6 +41,7 @@ export default function Login() {
       >
         <option value="patient">Patient</option>
         <option value="hsworker">Health Worker</option>
+        <option value="admin">Admin</option>
       </select>
 
       <form onSubmit={handleSubmit}>
@@ -59,9 +62,10 @@ export default function Login() {
       </form>
 
       <div className="text-center mt-3">
-        {role === "patient" ? (
+        {role === "patient" && (
           <Link to="/register-patient">New Patient? Register</Link>
-        ) : (
+        )}
+        {role === "hsworker" && (
           <Link to="/register-hsw">New Health Worker? Register</Link>
         )}
       </div>
