@@ -3,6 +3,7 @@ import { hash, compare } from 'bcryptjs'
 import { patientModel } from '../models/patientModel.js'
 import jwt from 'jsonwebtoken'
 import { appointmentModel } from '../models/appointmentModel.js'
+import { hswModel } from '../models/healthWorkerModel.js'
 
 export const patientRoute = express.Router()
 
@@ -108,6 +109,16 @@ patientRoute.get("/my-appointments/:patientId", async (req, res) => {
       .populate("hswId", "hswname email")
 
     res.json({ message: "My Appointments", payload: apps })
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+})
+
+// PATIENT GET ALL APPROVED HEALTH WORKERS
+patientRoute.get("/hsworkers", async (req, res) => {
+  try {
+    let workers = await hswModel.find({ approved: true }, "hswname email")
+    res.json({ payload: workers })
   } catch (err) {
     res.status(500).json({ message: err.message })
   }
