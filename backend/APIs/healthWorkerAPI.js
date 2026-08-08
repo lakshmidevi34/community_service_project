@@ -2,6 +2,7 @@ import express from 'express'
 import { hash, compare } from 'bcryptjs'
 import { hswModel } from '../models/healthWorkerModel.js'
 import { appointmentModel } from '../models/appointmentModel.js'
+import { patientModel } from '../models/patientModel.js'
 import jwt from 'jsonwebtoken'
 
 export const hswRoute = express.Router()
@@ -48,7 +49,14 @@ hswRoute.get("/appointments/:hswid", async (req, res) => {
   try {
     let apps = await appointmentModel
       .find({ hswId: req.params.hswid })
-      .populate("patientId", "name email todayCondition")
+      .populate({
+        path: "patientId",
+        select: "name email todayCondition prescriptions",
+        populate: {
+          path: "prescriptions.hswId",
+          select: "hswname email"
+        }
+      })
 
     res.json({ message: "Appointments", payload: apps })
   } catch (err) {
@@ -66,6 +74,34 @@ hswRoute.put("/update-appointment/:appointmentId", async (req, res) => {
     )
 
     res.json({ message: "Appointment updated", payload: updated })
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+})
+
+// HS WORKER ADD PRESCRIPTION
+hswRoute.post("/add-prescription/:patientId", async (req, res) => {
+  try {
+    const { hswId, suggestion } = req.body
+    if (!suggestion || !suggestion.trim()) {
+      return res.status(400).json({ message: "Prescription suggestion is required" })
+    }
+
+    const updatedPatient = await patientModel.findByIdAndUpdate(
+      req.params.patientId,
+      {
+        $push: {
+          prescriptions: {
+            hswId,
+            suggestion,
+            date: new Date()
+          }
+        }
+      },
+      { new: true }
+    ).populate("prescriptions.hswId", "hswname email")
+
+    res.json({ message: "Prescription added successfully", payload: updatedPatient })
   } catch (err) {
     res.status(500).json({ message: err.message })
   }

@@ -143,3 +143,16 @@ patientRoute.get("/hsworkers", async (req, res) => {
     res.status(500).json({ message: err.message })
   }
 })
+
+// PATIENT GET PRESCRIPTIONS
+patientRoute.get("/prescriptions/:patientId", async (req, res) => {
+  try {
+    const patient = await patientModel
+      .findById(req.params.patientId)
+      .populate("prescriptions.hswId", "hswname email")
+
+    res.json({ payload: patient?.prescriptions || [] })
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+})
