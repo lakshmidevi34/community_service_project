@@ -48,7 +48,7 @@ hswRoute.get("/appointments/:hswid", async (req, res) => {
   try {
     let apps = await appointmentModel
       .find({ hswId: req.params.hswid })
-      .populate("patientId", "name email")
+      .populate("patientId", "name email todayCondition")
 
     res.json({ message: "Appointments", payload: apps })
   } catch (err) {

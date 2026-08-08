@@ -25,6 +25,11 @@ const patientSchema = new Schema(
           required: true
         },
 
+        status: {
+          type: String,
+          default: "Sick"
+        },
+
         updatedBy: {
           type: String,
           enum: ["patient", "hsworker"],

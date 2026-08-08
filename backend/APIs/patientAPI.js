@@ -46,11 +46,31 @@ patientRoute.put('/todaycondi/:userid', async (req, res) => {
   try {
     let updated = await patientModel.findByIdAndUpdate(
       req.params.userid,
-      { $push: { todayCondition: { description: req.body.description, updatedBy: "patient" } } },
+      {
+        $push: {
+          todayCondition: {
+            description: req.body.description,
+            status: req.body.status || "Sick",
+            updatedBy: "patient",
+            createdAt: new Date()
+          }
+        }
+      },
       { new: true }
     )
 
     res.json({ message: "Condition added", payload: updated })
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+})
+
+// PATIENT GET CONDITIONS LIST
+patientRoute.get('/todaycondi/:userid', async (req, res) => {
+  try {
+    let patient = await patientModel.findById(req.params.userid)
+    if (!patient) return res.status(404).json({ message: "Patient not found" })
+    res.json({ payload: patient.todayCondition || [] })
   } catch (err) {
     res.status(500).json({ message: err.message })
   }
