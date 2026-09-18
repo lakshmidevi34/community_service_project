@@ -13,7 +13,6 @@ const app = express()
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// ✅ JSON MIDDLEWARE (YOU FORGOT THIS)
 app.use(express.json())
 
 // CORS Configuration
